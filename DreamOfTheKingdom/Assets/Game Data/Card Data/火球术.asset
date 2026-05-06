@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048a553422dfba545a306d825ae81d94, type: 3}
+  m_Name: "\u706B\u7403\u672F"
+  m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
+  cardName: "\u706B\u7403\u672F"
+  CardImage: {fileID: 21300000, guid: e977c1562987f7e41b442f92c93f4234, type: 3}
+  cost: 1
+  cardType: 1
+  description: "\u65E0\u89C6\u654C\u65B9\u683C\u6321\u503C\u5BF9\u654C\u65B9\u9020\u6210<color=\"Yellow\">12</color>\u70B9\u771F\u5B9E\u4F24\u5BB3"
