@@ -14,6 +14,7 @@ public class BaseEventSO<T> : ScriptableObject
     [TextArea]
     public string description;
 
+    //事件触发时调用的委托
     public UnityAction<T> OnEventRaised;
 
     //记录下最后一个发出广播的对象

@@ -949,6 +949,7 @@ GameObject:
   - component: {fileID: 2040793685051476070}
   - component: {fileID: 3499085100540872280}
   - component: {fileID: 261289943620042350}
+  - component: {fileID: 5205049245326501842}
   m_Layer: 6
   m_Name: Card
   m_TagString: Untagged
@@ -1018,7 +1019,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.013293505, y: -0.03162402}
+  m_Offset: {x: 0.013293505, y: 0.0035492182}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1028,7 +1029,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.635179, y: 3.8014126}
+  m_Size: {x: 2.635179, y: 3.8717592}
   m_EdgeRadius: 0
 --- !u!114 &261289943620042350
 MonoBehaviour:
@@ -1048,6 +1049,26 @@ MonoBehaviour:
   typeText: {fileID: 8410329344777437295}
   cardNameText: {fileID: 2214963025097882451}
   cardData: {fileID: 11400000, guid: ba3131ada0656374c8e038ee69693109, type: 2}
+  originalPosition: {x: 0, y: 0, z: 0}
+  originalRotation: {x: 0, y: 0, z: 0, w: 0}
+  originalLayerOrder: 0
+  isAnimating: 0
+  player: {fileID: 0}
+  discardCardEvent: {fileID: 11400000, guid: ec92c9997a12abd43ab807e600031077, type: 2}
+  costEvent: {fileID: 11400000, guid: 4238a0216f1ac0d4194709e2025f0a39, type: 2}
+--- !u!114 &5205049245326501842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564013316128278002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa155bfadfc7504ea1861b3d5b33f86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardDragHandler
+  arrowPrefab: {fileID: 765161550150393010, guid: 346496cc9dfdf484ba6b5de4bbbaf48a, type: 3}
 --- !u!1 &5666620747681708428
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048a553422dfba545a306d825ae81d94, type: 3}
   m_Name: "\u529B\u91CF\u62F3\u5957"
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
-  cardName: "\u9632\u5FA1"
+  cardName: "\u529B\u91CF\u5168\u5957"
   CardImage: {fileID: 21300000, guid: ab2c0effa4522104dbdb381ab0b16a7b, type: 3}
   cost: 1
   cardType: 2
-  description: "\u73A9\u5BB6\u83B7\u5F97<color=\"Yellow\">1</color>\u5C42\u529B\u91CF\uFF0C\u6BCF\u5C42\u529B\u91CF\u4F7F\u73A9\u5BB6\u83B7\u5F97\u653B\u51FB\u63D0\u5347"
+  description: "\u73A9\u5BB6\u83B7\u5F97<color=\"Yellow\">1</color>\u5C42\u529B\u91CF\uFF0C\u529B\u91CF\u4F7F\u73A9\u5BB6\u83B7\u5F97\u653B\u51FB\u63D0\u5347<color=\"Yellow\">50%</color>"
+  effects:
+  - {fileID: 11400000, guid: ef066c342a70668428e20fae61c7579e, type: 2}

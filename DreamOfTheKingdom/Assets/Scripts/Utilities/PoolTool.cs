@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
+[DefaultExecutionOrder(-100)]
 public class PoolTool : MonoBehaviour
 {
     public GameObject objPrefab;
 
     private ObjectPool<GameObject> Pool;
 
-    private void Start()
+    private void Awake()
     {
         //初始化对象池
         Pool = new ObjectPool<GameObject>(
@@ -24,6 +25,10 @@ public class PoolTool : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 预填充对象池
+    /// </summary>
+    /// <param name="count"></param>
     private void PreFillPool(int count)
     {
         var preFillArray = new GameObject[count];
@@ -37,12 +42,20 @@ public class PoolTool : MonoBehaviour
             Pool.Release(item);
         }
     }
-
+    
+    /// <summary>
+    /// 从对象池中获取对象（对外）
+    /// </summary>
+    /// <returns></returns>
     public GameObject GetObjectFromPool()
     {
         return Pool.Get();
     }
 
+    /// <summary>
+    /// 将对象返回给对象池（对外）
+    /// </summary>
+    /// <param name="obj"></param>
     public void ReturnObjectToPool(GameObject obj)
     {
         Pool.Release(obj);

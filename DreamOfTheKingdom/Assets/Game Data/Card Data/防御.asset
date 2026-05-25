@@ -16,4 +16,6 @@ MonoBehaviour:
   CardImage: {fileID: 21300000, guid: 7cdfac7a7246d274c8b983fd664158c9, type: 3}
   cost: 1
   cardType: 1
-  description: "\u83B7\u5F97<color=\"Yellow\">6</color>\u70B9\u683C\u6321\u503C"
+  description: "\u83B7\u5F97<color=\"Yellow\">5</color>\u70B9\u683C\u6321\u503C"
+  effects:
+  - {fileID: 11400000, guid: 39201f3e2bea60d46a3b6ef5d588fea9, type: 2}

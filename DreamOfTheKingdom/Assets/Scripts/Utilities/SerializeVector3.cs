@@ -1,21 +1,25 @@
 using UnityEngine;
 
+/// <summary>
+/// 用于 ScriptableObject / 可序列化类型中的 Vector3 数据，必须是纯数据类型。
+/// 若继承 MonoBehaviour，嵌套在 MapLayoutSO 中时 Unity 无法按普通字段持久化坐标，会导致地图连线保存丢失。
+/// </summary>
 [System.Serializable]
-public class SerializeVector3 : MonoBehaviour
+public class SerializeVector3
 {
     public float x, y, z;
 
+    /// <summary>无参构造：供 Unity 反序列化使用。</summary>
+    public SerializeVector3() { }
+
     /// <summary>
-    /// 构造函数：用于将Vector3对象序列化为可持久化的格式
+    /// 构造函数：用于将 Vector3 写入可持久化字段。
     /// </summary>
-    /// <param name="position">需要序列化的三维向量对象</param>
+    /// <param name="position">世界或本地空间坐标</param>
     public SerializeVector3(Vector3 position)
     {
-        // 将传入Vector3对象的x分量赋值给当前实例的x属性
         x = position.x;
-        // 将传入Vector3对象的y分量赋值给当前实例的y属性
         y = position.y;
-        // 将传入Vector3对象的z分量赋值给当前实例的z属性
         z = position.z;
     }
     
@@ -30,7 +34,7 @@ public class SerializeVector3 : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
-    public Vector2 ToVector2()
+    public Vector2Int ToVector2Int()
     {
         return new Vector2Int((int)x, (int)y);
     }

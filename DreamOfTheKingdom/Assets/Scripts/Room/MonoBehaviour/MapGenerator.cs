@@ -9,30 +9,28 @@ public class MapGenerator : MonoBehaviour
     [Header("地图布局")]
     public MapLayoutSO mapLayout;
 
-    [Header("房间预制体")]
+    [Header("预制体")]
     public Room roomPrefab;
-
     public LineRenderer linePrefab;
 
-    private float screenHeight;
-    private float screenWidth;
-    private float columnWidth;
-    private Vector3 generatorePoint;
+    private float screenHeight;//屏幕的高度
+    private float screenWidth;//屏幕宽度
+    private float columnWidth;//每一列之间的宽度
+    private Vector3 generatorePoint;//生成点的位置
 
-    public float border;
+    public float border;//边界
 
     private List<Room> rooms = new();
     private List<LineRenderer> lines = new();
 
     public List<RoomDataSO> roomDataList = new();
-    //用字典来存储对应的房间类型和数据
-    private Dictionary<RoomType,RoomDataSO> roomDataDict = new();
+    private Dictionary<RoomType,RoomDataSO> roomDataDict = new(); //用字典来存储对应的房间类型和数据
 
 
     private void Awake()
     {
-        screenHeight = Camera.main.orthographicSize * 2f;
-        screenWidth = screenHeight * Camera.main.aspect;
+        screenHeight = Camera.main.orthographicSize * 2f;//获取屏幕高度
+        screenWidth = screenHeight * Camera.main.aspect;//获取屏幕宽度，Camera.main.aspect是屏幕的宽高比
 
         columnWidth = screenWidth / (mapConfig.roomBlueprints.Count + 1);//每一列之间的宽度
 
@@ -65,8 +63,10 @@ public class MapGenerator : MonoBehaviour
         {
             var blueprint = mapConfig.roomBlueprints[column];
             var amount = UnityEngine.Random.Range(blueprint.min, blueprint.max);//随机生成房间数量
-            var startHeight = screenHeight / 2 - screenHeight / (amount + 1);//初始房间的y位置
-            generatorePoint = new Vector3(-screenWidth / 2 + border + columnWidth * column, startHeight, 0);//初始房间的位置
+
+            var startHeight = screenHeight / 2 - screenHeight / (amount + 1);//每一列第一个房间的y坐标
+            generatorePoint = new Vector3(-screenWidth / 2 + border + columnWidth * column, startHeight, 0);//每列第一个房间位置
+
             var newPosition = generatorePoint;
             var roomGapY = screenHeight / (amount + 1);//房间之间的高度间隔
 
@@ -87,7 +87,7 @@ public class MapGenerator : MonoBehaviour
                     newPosition.x = generatorePoint.x + UnityEngine.Random.Range(-border / 2, border / 2);
                 }
 
-                newPosition.y = startHeight - roomGapY * i; //更新房间位置
+                newPosition.y = startHeight - roomGapY * i; //更新房间y坐标的位置，每一列房间的y坐标是相同的，但是每一行房间的y坐标是不同的
 
                 //生成房间
                 var room = Instantiate(roomPrefab, newPosition, Quaternion.identity, transform);
@@ -140,14 +140,21 @@ public class MapGenerator : MonoBehaviour
         //遍历第二列的房间，检查是否有未连接的房间，如果有则连接到第一列的随机房间，确保所有房间都连接上
         foreach (var room in column2)
         {
-            if (!connectedRooms.Contains(room))
+            if (!connectedRooms.Contains(room))//判断第二列的房间是否已在之前创建的哈希列表（connectedRooms）中，不在就代表未与上一列连接
             {
-                ConnectToRandomRoom(room, column1,true);
+                ConnectToRandomRoom(room, column1,true);//连接到上一列的随机房间
             }
         }
 
     }
 
+    /// <summary>
+    /// 连接到随机房间的方法
+    /// </summary>
+    /// <param name="room">当前房间</param>
+    /// <param name="column2">第二列房间列表</param>
+    /// <param name="check">是否检查是否连接过</param>
+    /// <returns>返回连接到的房间</returns>
     private Room ConnectToRandomRoom(Room room, List<Room> column2,bool check)
     {
         Room targetRoom;
@@ -166,14 +173,21 @@ public class MapGenerator : MonoBehaviour
 
         //创建房间之间的连线
         var line = Instantiate(linePrefab, transform);
-        line.SetPosition(0, room.transform.position);
-        line.SetPosition(1, targetRoom.transform.position);
-        lines.Add(line);
+        line.positionCount = 2;
+        line.SetPosition(0, room.transform.position);//设置连线的起点
+        line.SetPosition(1, targetRoom.transform.position);//设置连线的终点
+        lines.Add(line);//将连线添加到连线列表中
 
-        return targetRoom;
+        return targetRoom;//返回连接到的房间
     }
 
 
+    /// <summary>
+    /// 重新生成房间
+    /// 1. 销毁所有房间
+    /// 2. 销毁所有连线
+    /// 3. 重新生成房间
+    /// </summary>
     [ContextMenu("ReGenerateRoom")]
     public void ReGenerateRoom()
     {
@@ -238,7 +252,8 @@ public class MapGenerator : MonoBehaviour
                 line = rooms[i].line,
                 roomData = rooms[i].roomData,
                 roomState = rooms[i].roomState,
-                linkTo = rooms[i].linkeTo,
+                // 拷贝列表，避免与 Room 实例共享引用；否则销毁房间后 SO 内引用易失效且序列化不稳定
+                linkTo = new List<Vector2Int>(rooms[i].linkeTo),
             };
 
             mapLayout.mapRoomDataList.Add(room);
@@ -250,7 +265,7 @@ public class MapGenerator : MonoBehaviour
         {
             var line = new LinePosition()
             {
-              startPos= new SerializeVector3(lines[i].GetPosition(0)),
+              startPos = new SerializeVector3(lines[i].GetPosition(0)),  
               endPos = new SerializeVector3(lines[i].GetPosition(1)) , 
             };
 
@@ -267,16 +282,25 @@ public class MapGenerator : MonoBehaviour
             var newRoom = Instantiate(roomPrefab,newPos,Quaternion.identity,transform);
             newRoom.roomState = mapLayout.mapRoomDataList[i].roomState;
             newRoom.SetupRoom(mapLayout.mapRoomDataList[i].colum,mapLayout.mapRoomDataList[i].line,mapLayout.mapRoomDataList[i].roomData);
-            newRoom.linkeTo = mapLayout.mapRoomDataList[i].linkTo;
+            var savedLinks = mapLayout.mapRoomDataList[i].linkTo;
+            newRoom.linkeTo = savedLinks != null && savedLinks.Count > 0
+                ? new List<Vector2Int>(savedLinks)
+                : new List<Vector2Int>();
             rooms.Add(newRoom);
         }
 
-        //读取连线
-        for(int i = 0;i<mapLayout.linePositionList.Count;i++)
+        //读取连线（需保证 positionCount，否则部分 Unity 版本下 SetPosition 无效）
+        if (mapLayout.linePositionList == null)
+            return;
+        for (int i = 0; i < mapLayout.linePositionList.Count; i++)
         {
+            var lp = mapLayout.linePositionList[i];
+            if (lp?.startPos == null || lp.endPos == null)
+                continue;
             var line = Instantiate(linePrefab, transform);
-            line.SetPosition(0, mapLayout.linePositionList[i].startPos.ToVector3());
-            line.SetPosition(1, mapLayout.linePositionList[i].endPos.ToVector3());
+            line.positionCount = 2;
+            line.SetPosition(0, lp.startPos.ToVector3());
+            line.SetPosition(1, lp.endPos.ToVector3());
             lines.Add(line);
         }
     }

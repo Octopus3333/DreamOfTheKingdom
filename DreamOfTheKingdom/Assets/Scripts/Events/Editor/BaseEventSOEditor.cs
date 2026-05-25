@@ -5,6 +5,7 @@ using System.Collections.Generic;
 [CustomEditor(typeof(BaseEventSO<>))]
 public class BaseEventSOEditor<T> : Editor
 {
+    
     private BaseEventSO<T> baseEventSO;
 
     private void OnEnable()

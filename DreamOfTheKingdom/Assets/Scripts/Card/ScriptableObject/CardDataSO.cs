@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CardDataSO", menuName = "Card/CardDataSO")]
@@ -11,5 +12,6 @@ public class CardDataSO : ScriptableObject
     [TextArea]
     public string description;
 
-    //TODO：执行的实际效果
+    //执行的实际效果
+    public List<Effect> effects;
 }

@@ -6,13 +6,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoadManager : MonoBehaviour
 {
+    public FadePanel fadePanel;
     private AssetReference currentScene;//当前加载的场景
     public AssetReference map;
+    public AssetReference menu;
+
+    public AssetReference intro;
 
     private Vector2Int currentRoomVector;
 
+    private Room currentRoom;
+
     [Header("广播")]
     public ObjectEventSO afterLoadRoomEvent;
+    public ObjectEventSO updateRoomEvent;
+
+    private void Awake()
+    {
+        currentRoomVector = Vector2Int.one * -1;
+        //LoadMenu();
+        LoadIntro();
+    }
 
     /// <summary>
     /// 在房间加载事件中监听
@@ -22,7 +36,7 @@ public class SceneLoadManager : MonoBehaviour
     {
         if(data is Room)
         {
-            Room currentRoom = data as Room;
+            currentRoom = data as Room;
             var currentData = currentRoom.roomData;
             currentRoomVector = new Vector2Int(currentRoom.column, currentRoom.line);
 
@@ -34,7 +48,7 @@ public class SceneLoadManager : MonoBehaviour
         //加载房间场景
         await LoadSceneTask();
 
-        afterLoadRoomEvent.RaisEvent(currentRoomVector, this);
+        afterLoadRoomEvent.RaisEvent(currentRoom, this);
     }
 
 
@@ -49,6 +63,7 @@ public class SceneLoadManager : MonoBehaviour
 
         if(s.Status == AsyncOperationStatus.Succeeded)
         {
+            fadePanel.FadeOut(0.2f);
             SceneManager.SetActiveScene(s.Result.Scene);
         }
     }
@@ -59,7 +74,9 @@ public class SceneLoadManager : MonoBehaviour
     /// </summary>
     private async Awaitable UnloadSceneTask()
     {
-        await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        fadePanel.FadeIn(0.4f);
+        await Awaitable.WaitForSecondsAsync(0.45f);
+        await Awaitable.FromAsyncOperation(SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene()));
     }
 
     /// <summary>
@@ -69,9 +86,31 @@ public class SceneLoadManager : MonoBehaviour
     {
         //先卸载房间场景
         await UnloadSceneTask();
+        if(currentRoomVector != Vector2.one * -1)
+        {
+            updateRoomEvent.RaisEvent(currentRoomVector, this);
+        }
 
         currentScene = map; //将当前场景设置为地图场景
         //加载地图场景
+        await LoadSceneTask();
+    }
+
+    public async void LoadMenu()
+    {
+        if(currentScene != null)
+            await UnloadSceneTask();
+            
+        currentScene = menu;
+        await LoadSceneTask();
+    }
+
+    public async void LoadIntro()
+    {
+        if(currentScene != null)
+            await UnloadSceneTask();
+            
+        currentScene = intro;
         await LoadSceneTask();
     }
 }

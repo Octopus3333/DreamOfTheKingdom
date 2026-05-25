@@ -16,4 +16,6 @@ MonoBehaviour:
   CardImage: {fileID: 21300000, guid: 28a02df1369b7fd4eab040459b0cc450, type: 3}
   cost: 1
   cardType: 0
-  description: "\u5BF9\u654C\u65B9\u9020\u6210<color=\"Yellow\">6</color>\u70B9\u4F24\u5BB3"
+  description: "\u5BF9\u654C\u65B9\u9020\u6210<color=\"Yellow\">8</color>\u70B9\u4F24\u5BB3"
+  effects:
+  - {fileID: 11400000, guid: 678babe241f7de84c9eb3e768369efd6, type: 2}

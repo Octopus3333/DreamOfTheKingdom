@@ -20,7 +20,14 @@ public enum RoomState
 
 public enum CardType
 {
-    Attack,
-    Defense,
-    Abilities
+    Attack,//攻击
+    Skill,//技能
+    Abilities,//能力
+}
+
+public enum EffectType
+{
+    Self,//自己
+    Target,//对单
+    All,//对群
 }

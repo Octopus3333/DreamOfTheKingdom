@@ -1,0 +1,58 @@
+/* 胶囊形血条：深灰高透明轨 + 亮绿填充 */
+
+/* --- ProgressBar 整体 --- */
+/* 主题里 ProgressBar 常有更大的 min-height，根节点变高后子条会贴顶；用 max-height 收紧并与轨道同高 */
+#HealthBar.unity-progress-bar,
+.unity-progress-bar {
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin: 2px;
+    justify-content: center;
+    position: relative;
+}
+
+/* 标题叠在条上，不占纵向文档流，避免「上面一条、下面一块空」的假高度 */
+.unity-progress-bar__title-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 子元素轨道/填充在此容器内绘制：圆角 + 裁剪 = 整体圆角胶囊；黑色描边画在容器边缘 */
+.unity-progress-bar__container {
+    border-radius: 16px;
+    overflow: hidden;
+    border-width: 2px;
+    border-color: rgb(0, 0, 0);
+}
+
+.unity-progress-bar__background {
+    margin: 0;
+    border-width: 0;
+    /* 深灰 + 高透明：轨道存在感弱、背后场景透出多；黑字若吃力可改标题色或加描边 */
+    background-color: rgba(38, 38, 42, 0.28);
+}
+
+.unity-progress-bar__progress {
+    margin: 0;
+    border-width: 0;
+    background-color: rgb(48, 230, 95);
+    transition: right 0.5s ease-out-circ, background-color 0.5s ease-in-out;
+}
+
+.highHealth .unity-progress-bar__progress {
+    background-color: rgb(48, 230, 95);
+}
+
+.mediumHealth .unity-progress-bar__progress {
+    background-color: rgb(255, 241, 40);
+}
+
+.lowHealth .unity-progress-bar__progress {
+    background-color: rgb(182, 4, 4);
+}
